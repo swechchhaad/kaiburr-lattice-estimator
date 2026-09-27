@@ -29,5 +29,5 @@ kaiburr_6144 = Kaiburr(24, 8, "kaiburr-6144")
 
 for scheme in (kaiburr_1792, kaiburr_4608, kaiburr_6144):
     print(scheme)
-    r = LWE.estimate.rough(scheme)   # core-SVP-style estimate
+    # r = LWE.estimate.rough(scheme)   # core-SVP-style estimate
     r = LWE.estimate(scheme)       # full estimate against all supported attacks
