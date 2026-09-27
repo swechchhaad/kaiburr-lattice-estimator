@@ -1,4 +1,5 @@
 from estimator import *
+from estimator.lwe_parameters import LWEParameters
 from estimator.nd import NoiseDistribution, RR, sqrt
 
 def f(t):
