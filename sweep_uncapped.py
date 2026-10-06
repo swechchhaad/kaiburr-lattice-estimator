@@ -3,8 +3,8 @@ import sys
 import estimator.lwe_primal as P
 import estimator.lwe_dual as D
 
-# 2^2000 classical core-SVP: 0.292 * beta = 2000, so beta ~ 6850 (cf. conf.py: 1754 ~ 2^512)
-BETA_CAP = int(sys.argv[1]) if len(sys.argv) > 1 else 6850
+# 2^1800 classical core-SVP: 0.292 * beta = 1800, so beta ~ 6165 (cf. conf.py: 1754 ~ 2^512)
+BETA_CAP = int(sys.argv[1]) if len(sys.argv) > 1 else 6165
 P.max_beta_global = BETA_CAP
 D.max_beta_global = BETA_CAP
 print(f"# max_beta overridden to {BETA_CAP} (default 1754, estimator/conf.py)")
