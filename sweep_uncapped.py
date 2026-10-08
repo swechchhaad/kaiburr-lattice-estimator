@@ -3,8 +3,7 @@ import sys
 import estimator.lwe_primal as P
 import estimator.lwe_dual as D
 
-# 2^1800 classical core-SVP: 0.292 * beta = 1800, so beta ~ 6165 (cf. conf.py: 1754 ~ 2^512)
-BETA_CAP = int(sys.argv[1]) if len(sys.argv) > 1 else 6165
+BETA_CAP = int(sys.argv[1]) if len(sys.argv) > 1 else 16384
 P.max_beta_global = BETA_CAP
 D.max_beta_global = BETA_CAP
 print(f"# max_beta overridden to {BETA_CAP} (default 1754, estimator/conf.py)")
@@ -29,9 +28,18 @@ def Kaiburr(k, t, tag):
     return LWEParameters(n=k * 256, q=3329, Xs=f(t), Xe=f(t), m=k * 256, tag=tag)
 
 
-for k, t in ((7, 4), (18, 6), (24, 8)):
-    params = Kaiburr(k, t, f"kaiburr-{k*256}").normalize()
-    print(f"\n--- n={params.n}, m={params.m}, Xs.stddev={float(params.Xs.stddev):.4f} ---")
+# same max_beta for every scheme, so kaiburr and FrodoKEM are estimated under one setting
+SCHEMES = [Kaiburr(k, t, f"kaiburr-{k*256}") for k, t in ((7, 4), (18, 6), (24, 8))]
+SCHEMES += [schemes.Frodo640, schemes.Frodo976, schemes.Frodo1344]
+
+# optional second argument filters by tag, e.g. `sage sweep_uncapped.py 16384 frodo`
+ONLY = sys.argv[2].lower() if len(sys.argv) > 2 else ""
+
+for scheme in SCHEMES:
+    if ONLY not in scheme.tag.lower():
+        continue
+    params = scheme.normalize()
+    print(f"\n--- {params.tag}: n={params.n}, m={params.m}, q={params.q}, Xs.stddev={float(params.Xs.stddev):.4f} ---")
     for name, alg in (
         ("usvp", partial(primal_usvp, red_cost_model=rcm, red_shape_model=rsm)),
         ("bdd", partial(primal_bdd, red_cost_model=rcm, red_shape_model=rsm)),
