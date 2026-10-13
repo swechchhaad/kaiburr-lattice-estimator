@@ -15,9 +15,9 @@ red_cost_model = RC.MATZOV
 red_cost_model_classical_poly_space = RC.ABLR21
 red_shape_model = GSA
 
-# Upper bound on blocksize, for security levels of at most 512 bits.
-# This value is selected as RC.ADPS16(1754, 1754) ~ 2^(512)
-max_beta = 1754
+# Upper bound on blocksize (and on the BDD svp dimension)
+# This is chosen large enough not to bind for any parameter set here (upstream used 1754, i.e. RC.ADPS16(1754, 1754) ~ 2^512).
+max_beta = 16384
 
 mitm_opt = "analytical"
 max_n_cache = 10000

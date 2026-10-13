@@ -332,11 +332,8 @@ class PrimalHybrid:
         d = len(r)
         r = [log(x) for x in r]
 
-        if d > 4096:
-            # caps the svp dimension at max_beta (conf.py), default 1754 since RC.ADPS16(1754, 1754).log(2.) = 512.168000000000
-            min_i = max(0, d - max_beta_global)
-        else:
-            min_i = 0
+        # caps the svp dimension at max_beta (conf.py)
+        min_i = max(0, d - max_beta_global)
 
         if is_homogeneous:
             tau = None
@@ -384,11 +381,8 @@ class PrimalHybrid:
             log_gh = 1.0 / n * (log_vol - 2 * ball_log_vol(n))
             return log_gh
 
-        if d > 4096:
-            # caps the svp dimension at max_beta (conf.py), default 1754 since RC.ADPS16(1754, 1754).log(2.) = 512.168000000000
-            min_i = max(0, d - max_beta_global)
-        else:
-            min_i = 0
+        # caps the svp dimension at max_beta (conf.py)
+        min_i = max(0, d - max_beta_global)
 
         if is_homogeneous:
             tau = None

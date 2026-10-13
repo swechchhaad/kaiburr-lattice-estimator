@@ -1,5 +1,5 @@
-from sage.all import oo
-from .nd import stddevf, Binary, CenteredBinomial, DiscreteGaussian, SparseTernary, UniformMod, Ternary, TUniform
+from sage.all import oo, RR, sqrt
+from .nd import NoiseDistribution, stddevf, Binary, CenteredBinomial, DiscreteGaussian, SparseTernary, UniformMod, Ternary, TUniform
 from .lwe_parameters import LWEParameters
 from .ntru_parameters import NTRUParameters
 from .sis_parameters import SISParameters
@@ -268,6 +268,40 @@ Frodo1344 = LWEParameters(
     Xe=DiscreteGaussian(1.4),
     m=1344 + 16,
     tag="Frodo1344",
+)
+
+# Kaiburr
+
+def _kaiburr_noise(t):
+    """Pr[±2] = 2^-t, Pr[±1] = 1/4, Pr[0] = 1/2 - 2^-(t-1)."""
+    return NoiseDistribution(mean=0, stddev=RR(sqrt(0.5 + 2 ** (3 - t))), bounds=(-2, 2), is_Gaussian_like=True)
+
+
+Kaiburr1792 = LWEParameters(
+    n=7 * 256,
+    q=3329,
+    Xs=_kaiburr_noise(4),
+    Xe=_kaiburr_noise(4),
+    m=7 * 256,
+    tag="Kaiburr1792",
+)
+
+Kaiburr4608 = LWEParameters(
+    n=18 * 256,
+    q=3329,
+    Xs=_kaiburr_noise(6),
+    Xe=_kaiburr_noise(6),
+    m=18 * 256,
+    tag="Kaiburr4608",
+)
+
+Kaiburr6144 = LWEParameters(
+    n=24 * 256,
+    q=3329,
+    Xs=_kaiburr_noise(8),
+    Xe=_kaiburr_noise(8),
+    m=24 * 256,
+    tag="Kaiburr6144",
 )
 
 # HES v1.1
