@@ -18,8 +18,6 @@ Lattice Estimator
    algorithms/ntru
    algorithms/sis-lattice
 
-   contributing
-
 .. toctree::
    :caption: Parameters from the Literature
    :maxdepth: 2
