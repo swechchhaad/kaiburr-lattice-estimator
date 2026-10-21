@@ -1,39 +1,24 @@
 # Lattice estimates for Kaiburr
 
-This artifact accompanies Tables 3 and 4 of the paper "Kaiburr: ML-KEM at (much) higher security."
-For each Kaiburr parameter set, it estimates the cost of the known lattice attacks (and Arora–GB and BKW) on the underlying LWE problem, and does the same for FrodoKEM for comparison.
+In this folder, we give the code to produce the attack-cost estimates for the LWE problems underlying Kaiburr and, for comparison, FrodoKEM (Tables 3 and 4). Besides the lattice attacks, this also covers Arora–Ge with Gröbner bases and BKW.
 
-This is a research fork of the well-known [lattice-estimator](https://github.com/malb/lattice-estimator), based on
-upstream commit `53da598`.
+This is a fork of the [lattice-estimator](https://github.com/malb/lattice-estimator) at commit `53da598`.
 
 ## Running
 
-Requires [SageMath](https://www.sagemath.org). From the repository root:
+Requires [SageMath](https://www.sagemath.org). From this directory:
 
 ```
 sage kaiburr.py    # Kaiburr1792, Kaiburr4608, Kaiburr6144
 sage frodo.py      # Frodo640, Frodo976, Frodo1344
 ```
 
-The parameter sets are also available directly:
+or, for a single parameter set:
 
 ```python
 >>> from estimator import *
 >>> LWE.estimate(schemes.Kaiburr4608)
 ```
-
-## Changes from upstream
-
-Upstream caps the lattice-reduction block size at `max_beta = 1754` (about 2^512 under the ADPS16 core-SVP model). It is too low for the larger Kaiburr sets,
-where every lattice attack then returns infinity. We make two changes:
-
-1. [`estimator/conf.py`](estimator/conf.py): `max_beta` is raised to 16384, larger than any lattice dimension that
-   arises here, so the cap does not bind.
-2. [`estimator/lwe_primal.py`](estimator/lwe_primal.py): the SVP dimension in the BDD attack was separately capped by a
-   hard-coded 1754 for lattices of dimension above 4096. It now follows `max_beta`.
-
-For parameter sets where the old cap did not bind, results are unchanged. We checked this for Kaiburr1792 and all three
-FrodoKEM sets, which give identical output under both caps.
 
 ## Expected results
 
@@ -48,8 +33,8 @@ FrodoKEM sets, which give identical output under both caps.
 | dual            | 173.0    | 519.8       | 1400.8      | error       |
 | dual_hybrid     | 170.1    | **467.3**   | 1458.3      | 2120.4      |
 
-The cheapest attack for each set is in bold.
-
+Bold marks the cheapest attack for each set. For Frodo976 and Frodo1344 (Table 4), the cheapest attacks
+cost 2^225.2 and 2^281.7.
 
 See the [upstream repository](https://github.com/malb/lattice-estimator) and its
 [documentation](https://lattice-estimator.readthedocs.io/en/latest/) for the estimator itself. If you use the estimator,
